@@ -6,8 +6,8 @@ class addon_recaptcha extends flux_addon
     {
         if ($this->is_configured())
         {
-            $manager->bind('register_validate', [$this, 'hook_register_validate']);
-            $manager->bind('register_pre_submit', [$this, 'hook_register_pre_submit']);
+            $manager->bind('register_after_validation', [$this, 'hook_register_after_validation']);
+            $manager->bind('register_before_submit', [$this, 'hook_register_before_submit']);
         }
     }
 
@@ -18,7 +18,7 @@ class addon_recaptcha extends flux_addon
         return !empty($pun_config['recaptcha_site_key']) && !empty($pun_config['recaptcha_secret_key']);
     }
 
-    function hook_register_validate()
+    function hook_register_after_validation()
     {
         global $errors;
 
@@ -28,7 +28,7 @@ class addon_recaptcha extends flux_addon
         }
     }
 
-    function hook_register_pre_submit()
+    function hook_register_before_submit()
     {
         global $pun_config;
 
