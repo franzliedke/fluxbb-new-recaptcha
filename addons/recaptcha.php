@@ -51,6 +51,8 @@ class addon_recaptcha extends flux_addon
     function verify_user_response()
     {
         global $pun_config;
+        
+        if (empty($_POST['g-recaptcha-response'])) return false;
 
         $secret = $pun_config['recaptcha_secret_key'];
         $response = $_POST['g-recaptcha-response'];
