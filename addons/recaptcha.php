@@ -68,12 +68,30 @@ class addon_recaptcha extends flux_addon
 
     function send_request($url)
     {
+        if (function_exists('curl_version'))
+            return $this->send_curl_request($url);
+        else
+            return $this->get_remote_file($url);
+    }
+
+    function send_curl_request($url)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
         curl_close($ch);
 
+        return $response;
+    }
+    
+    function get_remote_file($url)
+    {
+        $response = file_get_contents($url);
+        
+        if ($response === false)
+            throw new Exception('Cannot validate reCAPTCHA submission.');
+        
         return $response;
     }
 }
