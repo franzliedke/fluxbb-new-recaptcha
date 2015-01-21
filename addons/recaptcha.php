@@ -40,7 +40,7 @@ class addon_recaptcha extends flux_addon
                 <legend>Are you a human?</legend>
                 <div class="infldset">
                     <p>Please prove that you're a human being.</p>
-                    <script src='https://www.google.com/recaptcha/api.js'></script>
+                    <script src="https://www.google.com/recaptcha/api.js"></script>
                     <div class="g-recaptcha" data-sitekey="<?php echo pun_htmlspecialchars($site_key) ?>"></div>
                 </div>
             </fieldset>
