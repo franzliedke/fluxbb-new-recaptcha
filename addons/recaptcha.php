@@ -40,7 +40,7 @@ class addon_recaptcha extends flux_addon
                 <legend>Are you a human?</legend>
                 <div class="infldset">
                     <p>Please prove that you're a human being.</p>
-                    <script src='https://www.google.com/recaptcha/api.js'></script>
+                    <script src="https://www.google.com/recaptcha/api.js"></script>
                     <div class="g-recaptcha" data-sitekey="<?php echo pun_htmlspecialchars($site_key) ?>"></div>
                 </div>
             </fieldset>
@@ -51,7 +51,7 @@ class addon_recaptcha extends flux_addon
     function verify_user_response()
     {
         global $pun_config;
-        
+
         if (empty($_POST['g-recaptcha-response'])) return false;
 
         $secret = $pun_config['recaptcha_secret_key'];
@@ -88,10 +88,10 @@ class addon_recaptcha extends flux_addon
     function get_remote_file($url)
     {
         $response = file_get_contents($url);
-        
+
         if ($response === false)
             throw new Exception('Cannot validate reCAPTCHA submission.');
-        
+
         return $response;
     }
 }
