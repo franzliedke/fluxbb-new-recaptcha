@@ -22,7 +22,7 @@ class addon_recaptcha extends flux_addon
     {
         global $errors;
 
-        if (!$this->verify_user_response())
+        if (empty($errors) && !$this->verify_user_response())
         {
             $errors[] = 'Please prove that you are human.';
         }
