@@ -6,8 +6,8 @@ class addon_recaptcha extends flux_addon
     {
         if ($this->is_configured())
         {
-            $manager->bind('register_after_validation', [$this, 'hook_register_after_validation']);
-            $manager->bind('register_before_submit', [$this, 'hook_register_before_submit']);
+            $manager->bind('register_after_validation', array($this, 'hook_register_after_validation'));
+            $manager->bind('register_before_submit', array($this, 'hook_register_before_submit'));
         }
     }
 
