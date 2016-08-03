@@ -6,9 +6,31 @@ class addon_recaptcha extends flux_addon
     {
         if ($this->is_configured())
         {
-            $manager->bind('register_after_validation', array($this, 'hook_register_after_validation'));
-            $manager->bind('register_before_submit', array($this, 'hook_register_before_submit'));
+            global $pun_user;
+            $this->get_language();
+
+            // Display reCAPTCHA when guests are allowed to post
+            if(($pun_user['g_post_replies'] || $pun_user['g_post_topics']) && $pun_user['is_guest']){
+                $manager->bind('post_after_validation', array($this, 'hook_after_validation'));
+                $manager->bind('post_before_submit', array($this, 'hook_before_submit'));
+                $manager->bind('quickpost_before_submit', array($this, 'hook_before_submit'));
+            }
+
+            $manager->bind('register_after_validation', array($this, 'hook_after_validation'));
+            $manager->bind('register_before_submit', array($this, 'hook_before_submit'));
         }
+    }
+
+    function get_language()
+    {
+        global $pun_user;
+
+        if (file_exists(PUN_ROOT.'lang/'.$pun_user['language'].'/recaptcha_plugin.php'))
+            require PUN_ROOT.'lang/'.$pun_user['language'].'/recaptcha_plugin.php';
+        else
+            require PUN_ROOT.'lang/English/recaptcha_plugin.php';
+
+        $GLOBALS['lang_recaptcha'] = $lang_recaptcha;
     }
 
     function is_configured()
@@ -18,34 +40,34 @@ class addon_recaptcha extends flux_addon
         return !empty($pun_config['recaptcha_site_key']) && !empty($pun_config['recaptcha_secret_key']);
     }
 
-    function hook_register_after_validation()
+    function hook_after_validation()
     {
-        global $errors;
+        global $errors, $lang_recaptcha;
 
         if (empty($errors) && !$this->verify_user_response())
         {
-            $errors[] = 'Please prove that you are human.';
+            $errors[] = $lang_recaptcha['Error'];
         }
     }
 
-    function hook_register_before_submit()
+    function hook_before_submit()
     {
-        global $pun_config;
+        global $pun_config, $lang_recaptcha;
 
         $site_key = $pun_config['recaptcha_site_key'];
 
-?>
+        ?>
         <div class="inform">
             <fieldset>
-                <legend>Are you a human?</legend>
+                <legend><?= $lang_recaptcha['Human']; ?></legend>
                 <div class="infldset">
-                    <p>Please prove that you're a human being.</p>
+                    <p><?= $lang_recaptcha['Prove']; ?></p>
                     <script src="https://www.google.com/recaptcha/api.js"></script>
                     <div class="g-recaptcha" data-sitekey="<?php echo pun_htmlspecialchars($site_key) ?>"></div>
                 </div>
             </fieldset>
         </div>
-<?php
+        <?php
     }
 
     function verify_user_response()
@@ -85,13 +107,14 @@ class addon_recaptcha extends flux_addon
 
         return $response;
     }
-    
+
     function get_remote_file($url)
     {
+        global $lang_recaptcha;
         $response = file_get_contents($url);
 
         if ($response === false)
-            throw new Exception('Cannot validate reCAPTCHA submission.');
+            throw new Exception($lang_recaptcha['API error']);
 
         return $response;
     }
