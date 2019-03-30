@@ -13,6 +13,11 @@ if (!defined('PUN'))
 // Tell admin_loader.php that this is indeed a plugin and that it is loaded
 define('PUN_PLUGIN_LOADED', 1);
 
+// Load language file
+if (file_exists(PUN_ROOT.'lang/'.$pun_user['language'].'/recaptcha_addon.php'))
+    require PUN_ROOT.'lang/'.$pun_user['language'].'/recaptcha_addon.php';
+else
+    require PUN_ROOT.'lang/English/recaptcha_addon.php';
 
 // Store the config
 if (isset($_POST['process_form']))
@@ -36,7 +41,7 @@ if (isset($_POST['process_form']))
 
     generate_config_cache();
 
-    redirect('admin_loader.php?plugin=AP_reCAPTCHA.php', 'Settings saved successfully. Redirecting...');
+    redirect('admin_loader.php?plugin=AP_reCAPTCHA.php', $lang_recaptcha['Settings saved']);
 }
 
 
@@ -46,25 +51,25 @@ generate_admin_menu($plugin);
 ?>
 
 <div class="blockform">
-    <h2><span>reCAPTCHA</span></h2>
+    <h2><span><?= $lang_recaptcha['reCAPTCHA'] ?></span></h2>
     <div class="box">
         <form id="recaptcha" method="post" action="<?php echo $_SERVER['REQUEST_URI'] ?>">
             <div class="inform">
                 <fieldset>
-                    <legend>Configure reCAPTCHA integration</legend>
+                    <legend><?= $lang_recaptcha['Configure']; ?></legend>
                     <div class="infldset">
                         <p>
-                            Please provide your reCAPTCHA account credentials as provided by Google.
+                            <?= $lang_recaptcha['Keys description']; ?>
                         </p>
                         <table class="aligntop" cellspacing="0">
                             <tr>
-                                <th scope="row">Site key</th>
+                                <th scope="row"><?= $lang_recaptcha['Site key']; ?></th>
                                 <td>
                                     <input type="text" name="recaptcha_site_key" size="40" value="<?php if (!empty($pun_config['recaptcha_site_key'])) echo pun_htmlspecialchars($pun_config['recaptcha_site_key']); ?>" />
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row">Secret key</th>
+                                <th scope="row"><?= $lang_recaptcha['Secret key']; ?></th>
                                 <td>
                                     <input type="text" name="recaptcha_secret_key" size="40" value="<?php if (!empty($pun_config['recaptcha_secret_key'])) echo pun_htmlspecialchars($pun_config['recaptcha_secret_key']); ?>" />
                                 </td>
@@ -73,7 +78,7 @@ generate_admin_menu($plugin);
                     </div>
                 </fieldset>
             </div>
-            <p class="submitend"><input type="submit" name="process_form" value="Save" /></p>
+            <p class="submitend"><input type="submit" name="process_form" value="<?= $lang_recaptcha['Save'] ?>" /></p>
         </form>
     </div>
 </div>

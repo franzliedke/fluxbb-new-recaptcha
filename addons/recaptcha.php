@@ -6,6 +6,8 @@ class addon_recaptcha extends flux_addon
     {
         if ($this->is_configured())
         {
+            $this->get_language();
+
             $manager->bind('register_after_validation', array($this, 'hook_register_after_validation'));
             $manager->bind('register_before_submit', array($this, 'hook_register_before_submit'));
         }
@@ -18,28 +20,38 @@ class addon_recaptcha extends flux_addon
         return !empty($pun_config['recaptcha_site_key']) && !empty($pun_config['recaptcha_secret_key']);
     }
 
+    function get_language()
+    {
+        global $pun_user;
+
+        if (file_exists(PUN_ROOT.'lang/'.$pun_user['language'].'/recaptcha_addon.php'))
+            require PUN_ROOT.'lang/'.$pun_user['language'].'/recaptcha_addon.php';
+        else
+            require PUN_ROOT.'lang/English/recaptcha_addon.php';
+    }
+
     function hook_register_after_validation()
     {
-        global $errors;
+        global $errors, $lang_recaptcha;
 
         if (empty($errors) && !$this->verify_user_response())
         {
-            $errors[] = 'Please prove that you are human.';
+            $errors[] = $lang_recaptcha['Error'];
         }
     }
 
     function hook_register_before_submit()
     {
-        global $pun_config;
+        global $pun_config, $lang_recaptcha;
 
         $site_key = $pun_config['recaptcha_site_key'];
 
 ?>
         <div class="inform">
             <fieldset>
-                <legend>Are you a human?</legend>
+                <legend><?= $lang_recaptcha['Human']; ?></legend>
                 <div class="infldset">
-                    <p>Please prove that you're a human being.</p>
+                    <p><?= $lang_recaptcha['Prove']; ?></p>
                     <script src="https://www.google.com/recaptcha/api.js"></script>
                     <div class="g-recaptcha" data-sitekey="<?php echo pun_htmlspecialchars($site_key) ?>"></div>
                 </div>
@@ -85,13 +97,15 @@ class addon_recaptcha extends flux_addon
 
         return $response;
     }
-    
+
     function get_remote_file($url)
     {
+        global $lang_recaptcha;
+
         $response = file_get_contents($url);
 
         if ($response === false)
-            throw new Exception('Cannot validate reCAPTCHA submission.');
+            throw new Exception($lang_recaptcha['API error']);
 
         return $response;
     }

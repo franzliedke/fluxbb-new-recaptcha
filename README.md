@@ -10,6 +10,7 @@ FluxBB v1.5.8 or above
 
 1. Upload `plugins/AP_reCAPTCHA.php`.
 2. Upload `addons/recaptcha.php`.
+3. Upload `lang/English/recaptcha_addon.php`.
 
 ## Configuration
 
