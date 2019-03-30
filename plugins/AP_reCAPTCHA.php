@@ -22,10 +22,11 @@ else
 // Store the config
 if (isset($_POST['process_form']))
 {
+    $enabled = isset($_POST['recaptcha_enabled']) ? 1 : 0;
     $site_key = isset($_POST['recaptcha_site_key']) ? pun_trim($_POST['recaptcha_site_key']) : '';
     $secret_key = isset($_POST['recaptcha_secret_key']) ? pun_trim($_POST['recaptcha_secret_key']) : '';
 
-    foreach (compact('site_key', 'secret_key') as $key => $value)
+    foreach (compact('enabled', 'site_key', 'secret_key') as $key => $value)
     {
         $key = 'recaptcha_'.$key;
 
@@ -56,12 +57,18 @@ generate_admin_menu($plugin);
         <form id="recaptcha" method="post" action="<?php echo $_SERVER['REQUEST_URI'] ?>">
             <div class="inform">
                 <fieldset>
-                    <legend><?= $lang_recaptcha['Configure']; ?></legend>
+                    <legend><?= $lang_recaptcha['General']; ?></legend>
                     <div class="infldset">
                         <p>
-                            <?= $lang_recaptcha['Keys description']; ?>
+                            <?= $lang_recaptcha['General description']; ?>
                         </p>
                         <table class="aligntop" cellspacing="0">
+                            <tr>
+                                <th scope="row"><?= $lang_recaptcha['Enable']; ?></th>
+                                <td>
+                                    <input type="checkbox" name="recaptcha_enabled" <?= empty($pun_config['recaptcha_enabled']) ? '' : 'checked' ?> />
+                                </td>
+                            </tr>
                             <tr>
                                 <th scope="row"><?= $lang_recaptcha['Site key']; ?></th>
                                 <td>
