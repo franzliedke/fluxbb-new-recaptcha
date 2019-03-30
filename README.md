@@ -16,6 +16,6 @@ FluxBB v1.5.8 or above
 
 After installation, head to your FluxBB administration panel.
 In the left-hand menu, under "Plugins" select "reCAPTCHA".
-Enter your credentials as provided by Google, enable reCAPTCHA and save.
+Enter your credentials as provided by Google, enable reCAPTCHA, select where you want reCAPTCHA to show up, and save.
 The addon should now start working.
 Head to the registration page to confirm everything is okay.

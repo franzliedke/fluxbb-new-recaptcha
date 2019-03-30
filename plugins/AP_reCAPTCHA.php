@@ -25,8 +25,10 @@ if (isset($_POST['process_form']))
     $enabled = isset($_POST['recaptcha_enabled']) ? 1 : 0;
     $site_key = isset($_POST['recaptcha_site_key']) ? pun_trim($_POST['recaptcha_site_key']) : '';
     $secret_key = isset($_POST['recaptcha_secret_key']) ? pun_trim($_POST['recaptcha_secret_key']) : '';
+    $location_register = isset($_POST['recaptcha_location_register']) ? 1 : 0;
+    $location_login = isset($_POST['recaptcha_location_login']) ? 1 : 0;
 
-    foreach (compact('enabled', 'site_key', 'secret_key') as $key => $value)
+    foreach (compact('enabled', 'site_key', 'secret_key', 'location_register', 'location_login') as $key => $value)
     {
         $key = 'recaptcha_'.$key;
 
@@ -79,6 +81,29 @@ generate_admin_menu($plugin);
                                 <th scope="row"><?= $lang_recaptcha['Secret key']; ?></th>
                                 <td>
                                     <input type="text" name="recaptcha_secret_key" size="40" value="<?php if (!empty($pun_config['recaptcha_secret_key'])) echo pun_htmlspecialchars($pun_config['recaptcha_secret_key']); ?>" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend><?= $lang_recaptcha['Locations']; ?></legend>
+                    <div class="infldset">
+                        <p>
+                            <?= $lang_recaptcha['Locations description']; ?>
+                        </p>
+                        <table class="aligntop" cellspacing="0">
+                            <tr>
+                                <th scope="row"><?= $lang_recaptcha['Register']; ?></th>
+                                <td>
+                                    <input type="checkbox" name="recaptcha_location_register" <?= empty($pun_config['recaptcha_location_register']) ? '' : 'checked' ?> />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?= $lang_recaptcha['Login']; ?></th>
+                                <td>
+                                    <input type="checkbox" name="recaptcha_location_login" <?= empty($pun_config['recaptcha_location_login']) ? '' : 'checked' ?> />
                                 </td>
                             </tr>
                         </table>

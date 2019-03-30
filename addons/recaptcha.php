@@ -8,8 +8,17 @@ class addon_recaptcha extends flux_addon
 
 		$this->get_language();
 
-		$manager->bind('register_after_validation', array($this, 'hook_register_after_validation'));
-		$manager->bind('register_before_submit', array($this, 'hook_register_before_submit'));
+		if ($this->enabled_location('register'))
+		{
+			$manager->bind('register_after_validation', array($this, 'hook_after_validation'));
+			$manager->bind('register_before_submit', array($this, 'hook_before_submit'));
+		}
+
+		if ($this->enabled_location('login'))
+		{
+			$manager->bind('login_after_validation', array($this, 'hook_after_validation'));
+			$manager->bind('login_before_submit', array($this, 'hook_before_submit'));
+		}
 	}
 
 	function is_configured()
@@ -17,6 +26,13 @@ class addon_recaptcha extends flux_addon
 		global $pun_config;
 
 		return !empty($pun_config['recaptcha_enabled']) && !empty($pun_config['recaptcha_site_key']) && !empty($pun_config['recaptcha_secret_key']);
+	}
+
+	function enabled_location($page)
+	{
+		global $pun_config;
+
+		return !empty($pun_config['recaptcha_location_'.$page]);
 	}
 
 	function get_language()
@@ -29,7 +45,7 @@ class addon_recaptcha extends flux_addon
 			require PUN_ROOT.'lang/English/recaptcha_addon.php';
 	}
 
-	function hook_register_after_validation()
+	function hook_after_validation()
 	{
 		global $errors, $lang_recaptcha;
 
@@ -39,7 +55,7 @@ class addon_recaptcha extends flux_addon
 		}
 	}
 
-	function hook_register_before_submit()
+	function hook_before_submit()
 	{
 		global $pun_config, $lang_recaptcha;
 
