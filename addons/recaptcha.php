@@ -4,13 +4,12 @@ class addon_recaptcha extends flux_addon
 {
 	function register($manager)
 	{
-		if ($this->is_configured())
-		{
-			$this->get_language();
+		if (!$this->is_configured()) return;
 
-			$manager->bind('register_after_validation', array($this, 'hook_register_after_validation'));
-			$manager->bind('register_before_submit', array($this, 'hook_register_before_submit'));
-		}
+		$this->get_language();
+
+		$manager->bind('register_after_validation', array($this, 'hook_register_after_validation'));
+		$manager->bind('register_before_submit', array($this, 'hook_register_before_submit'));
 	}
 
 	function is_configured()
