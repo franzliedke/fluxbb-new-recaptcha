@@ -4,6 +4,8 @@ class addon_recaptcha extends flux_addon
 {
 	function register($manager)
 	{
+		global $pun_user;
+
 		if (!$this->is_configured()) return;
 
 		$this->get_language();
@@ -18,6 +20,13 @@ class addon_recaptcha extends flux_addon
 		{
 			$manager->bind('login_after_validation', array($this, 'hook_after_validation'));
 			$manager->bind('login_before_submit', array($this, 'hook_before_submit'));
+		}
+
+		if ($this->enabled_location('guestpost') && $pun_user['is_guest'])
+		{
+			$manager->bind('post_after_validation', array($this, 'hook_after_validation'));
+			$manager->bind('post_before_submit', array($this, 'hook_before_submit'));
+			$manager->bind('quickpost_before_submit', array($this, 'hook_before_submit'));
 		}
 	}
 

@@ -14,6 +14,7 @@ $GLOBALS['lang_recaptcha'] = array(
 	'Locations description' => 'Where do you want reCAPTCHA to show up?',
 	'Register'              => 'On the registration page',
 	'Login'                 => 'On the login page',
+	'Guest post'            => 'When guests make a post',
 	'Save'                  => 'Save',
 	'Settings saved'        => 'Settings saved successfully. Redirecting...',
 );

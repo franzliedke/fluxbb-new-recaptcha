@@ -27,8 +27,9 @@ if (isset($_POST['process_form']))
     $secret_key = isset($_POST['recaptcha_secret_key']) ? pun_trim($_POST['recaptcha_secret_key']) : '';
     $location_register = isset($_POST['recaptcha_location_register']) ? 1 : 0;
     $location_login = isset($_POST['recaptcha_location_login']) ? 1 : 0;
+    $location_guestpost = isset($_POST['recaptcha_location_guestpost']) ? 1 : 0;
 
-    foreach (compact('enabled', 'site_key', 'secret_key', 'location_register', 'location_login') as $key => $value)
+    foreach (compact('enabled', 'site_key', 'secret_key', 'location_register', 'location_login', 'location_guestpost') as $key => $value)
     {
         $key = 'recaptcha_'.$key;
 
@@ -104,6 +105,12 @@ generate_admin_menu($plugin);
                                 <th scope="row"><?= $lang_recaptcha['Login']; ?></th>
                                 <td>
                                     <input type="checkbox" name="recaptcha_location_login" <?= empty($pun_config['recaptcha_location_login']) ? '' : 'checked' ?> />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?= $lang_recaptcha['Guest post']; ?></th>
+                                <td>
+                                    <input type="checkbox" name="recaptcha_location_guestpost" <?= empty($pun_config['recaptcha_location_guestpost']) ? '' : 'checked' ?> />
                                 </td>
                             </tr>
                         </table>
